@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { AccountEntity } from 'src/account/entities/account.entity';
+import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: 'users' })
 export class UserEntity {
@@ -16,4 +17,7 @@ export class UserEntity {
 
   @Column({ name: 'cpf', unique: true, nullable: false })
   cpf: string;
+
+  @OneToOne(() => AccountEntity, (account) => account.user, { cascade: true })
+  account: AccountEntity;
 }

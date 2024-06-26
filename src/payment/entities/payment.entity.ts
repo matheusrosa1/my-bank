@@ -1,7 +1,14 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { AccountEntity } from 'src/account/entities/account.entity';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity({ name: 'payments' })
-export class Payment {
+export class PaymentEntity {
   @PrimaryGeneratedColumn('rowid')
   id: number;
 
@@ -17,4 +24,8 @@ export class Payment {
 
   @Column({ name: 'date', nullable: false })
   date: Date;
+
+  @ManyToOne(() => AccountEntity, (account) => account.payments)
+  @JoinColumn({ name: 'account_id' })
+  account: AccountEntity; // Cada pagamento pertence a uma conta
 }

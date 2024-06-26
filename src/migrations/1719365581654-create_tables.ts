@@ -15,21 +15,21 @@ export class CreateTables1719365581654 implements MigrationInterface {
 
     await queryRunner.query(`CREATE TABLE "accounts" (
       "id" SERIAL NOT NULL,
-      "userId" integer NOT NULL,
+      "user_id" integer NOT NULL,
       "type" character varying NOT NULL,
       "balance" numeric NOT NULL,
       CONSTRAINT "PK_accounts" PRIMARY KEY ("id"),
-      CONSTRAINT "FK_accounts_users" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE
+      CONSTRAINT "FK_accounts_users" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE
     )`);
 
     await queryRunner.query(`CREATE TABLE "payments" (
       "id" SERIAL NOT NULL,
-      "accountId" integer NOT NULL,
+      "account_id" integer NOT NULL,
       "amount" numeric NOT NULL,
       "date" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
       "description" character varying NOT NULL,
       CONSTRAINT "PK_payments" PRIMARY KEY ("id"),
-      CONSTRAINT "FK_payments_accounts" FOREIGN KEY ("accountId") REFERENCES "accounts"("id") ON DELETE NO ACTION ON UPDATE NO ACTION
+      CONSTRAINT "FK_payments_accounts" FOREIGN KEY ("account_id") REFERENCES "accounts"("id") ON DELETE NO ACTION ON UPDATE NO ACTION
     )`);
   }
 
