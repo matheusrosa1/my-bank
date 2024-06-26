@@ -2,12 +2,15 @@ import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class CreateTables1719365581654 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
-    // Criando a tabela users
     await queryRunner.query(`CREATE TABLE "users" (
       "id" SERIAL NOT NULL,
       "name" character varying NOT NULL,
       "email" character varying NOT NULL,
-      CONSTRAINT "PK_users" PRIMARY KEY ("id")
+      "cpf" character varying NOT NULL,
+      "password" character varying NOT NULL,
+      CONSTRAINT "PK_users" PRIMARY KEY ("id"),
+      CONSTRAINT "UQ_users_email" UNIQUE ("email"),
+      CONSTRAINT "UQ_users_cpf" UNIQUE ("cpf")
     )`);
 
     await queryRunner.query(`CREATE TABLE "accounts" (
