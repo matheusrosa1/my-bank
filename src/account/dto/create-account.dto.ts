@@ -7,7 +7,7 @@ export class CreateAccountDto {
 
   @IsString()
   @IsNotEmpty()
-  typeAccount: string;
+  type: string;
 
   @IsNumber()
   @IsNotEmpty()
