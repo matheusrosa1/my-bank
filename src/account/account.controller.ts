@@ -16,7 +16,6 @@ import { AuthGuard } from '@nestjs/passport';
 @Controller('accounts')
 export class AccountController {
   constructor(private readonly accountService: AccountService) {}
-  @UseGuards(AuthGuard('jwt'))
   @Post()
   create(@Body() createAccountDto: CreateAccountDto) {
     return this.accountService.create(createAccountDto);

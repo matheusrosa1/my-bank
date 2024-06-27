@@ -2,14 +2,12 @@ import {
   Injectable,
   NotFoundException,
   UnauthorizedException,
-  UseGuards,
 } from '@nestjs/common';
 import { CreateAccountDto } from './dto/create-account.dto';
 import { UpdateAccountDto } from './dto/update-account.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AccountEntity } from './entities/account.entity';
 import { Repository } from 'typeorm';
-import { AuthGuard } from '@nestjs/passport';
 
 @Injectable()
 export class AccountService {
@@ -18,11 +16,12 @@ export class AccountService {
     private readonly accountRepository: Repository<AccountEntity>,
   ) {}
 
-  @UseGuards(AuthGuard('jwt'))
   async create(createAccountDto: CreateAccountDto) {
     if (
       createAccountDto.type !== 'checking' &&
-      createAccountDto.type !== 'savings'
+      createAccountDto.type !== 'savings' &&
+      createAccountDto.type !== 'poupança' &&
+      createAccountDto.type !== 'corrente'
     ) {
       throw new UnauthorizedException('Invalid account type');
     }
@@ -34,12 +33,10 @@ export class AccountService {
     return this.accountRepository.save(createAccountDto);
   }
 
-  @UseGuards(AuthGuard('jwt'))
   async findAll() {
     return this.accountRepository.find();
   }
 
-  @UseGuards(AuthGuard('jwt'))
   async findOne(id: number) {
     const account = await this.accountRepository.findOne({ where: { id } });
 
@@ -50,7 +47,6 @@ export class AccountService {
     return account;
   }
 
-  @UseGuards(AuthGuard('jwt'))
   async update(id: number, updateAccountDto: UpdateAccountDto) {
     const account = await this.findOne(id);
 
@@ -73,7 +69,6 @@ export class AccountService {
     return this.accountRepository.save(account);
   }
 
-  @UseGuards(AuthGuard('jwt'))
   async remove(id: number) {
     const account = await this.findOne(id);
 

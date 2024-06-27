@@ -19,8 +19,8 @@ export class SeedData1719365581655 implements MigrationInterface {
     await queryRunner.query(`
       INSERT INTO "payments" ("account_id", "amount", "date", "description")
       VALUES
-        (1, 200.00, '2024-01-01T10:00:00Z', 'Payment to XYZ'),
-        (2, 300.00, '2024-01-02T12:00:00Z', 'Payment to ABC')
+        (1, 200.00, '2024-01-01', 'Payment to XYZ'),
+        (2, 300.00, '2024-01-02', 'Payment to ABC')
     `);
   }
 

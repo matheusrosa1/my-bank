@@ -2,15 +2,12 @@ import {
   Injectable,
   NotFoundException,
   UnauthorizedException,
-  UseGuards,
 } from '@nestjs/common';
 import { CreatePaymentDto } from './dto/create-payment.dto';
-import { UpdatePaymentDto } from './dto/update-payment.dto';
 import { Repository } from 'typeorm';
 import { PaymentEntity } from './entities/payment.entity';
 import { AccountEntity } from 'src/account/entities/account.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AuthGuard } from '@nestjs/passport';
 
 @Injectable()
 export class PaymentService {
@@ -21,9 +18,16 @@ export class PaymentService {
     private readonly accountRepository: Repository<AccountEntity>,
   ) {}
 
-  @UseGuards(AuthGuard('jwt'))
   async create(createPaymentDto: CreatePaymentDto): Promise<PaymentEntity> {
     const { accountId, amount, description } = createPaymentDto;
+
+    if (!createPaymentDto.amount) {
+      throw new UnauthorizedException('Amount is required');
+    }
+
+    if (!createPaymentDto.accountId) {
+      throw new UnauthorizedException('Account ID is required');
+    }
 
     const account = await this.accountRepository.findOne({
       where: { id: accountId },
@@ -49,17 +53,15 @@ export class PaymentService {
     return this.paymentRepository.save(payment);
   }
 
-  @UseGuards(AuthGuard('jwt'))
   async findAll() {
     return this.paymentRepository.find();
   }
 
-  @UseGuards(AuthGuard('jwt'))
   findOne(id: number) {
     return `This action returns a #${id} payment`;
   }
 
-  @UseGuards(AuthGuard('jwt'))
+  /*   @UseGuards(AuthGuard('jwt'))
   async update(id: number, updatePaymentDto: UpdatePaymentDto) {
     const payment = await this.paymentRepository.findOne({ where: { id } });
 
@@ -76,7 +78,7 @@ export class PaymentService {
     }
 
     return this.paymentRepository.save(payment);
-  }
+  } */
 
   /*   remove(id: number) {
     return `This action removes a #${id} payment`;

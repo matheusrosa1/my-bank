@@ -1,4 +1,5 @@
 import { AccountEntity } from 'src/account/entities/account.entity';
+
 import {
   Column,
   Entity,
@@ -22,10 +23,10 @@ export class PaymentEntity {
   })
   amount: number;
 
-  @Column({ name: 'description', nullable: false })
+  @Column({ name: 'description', nullable: true })
   description: string;
 
-  @Column({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
+  @Column({ name: 'date', type: 'date', default: () => 'CURRENT_DATE' })
   date: Date;
 
   @ManyToOne(() => AccountEntity, (account) => account.payments)

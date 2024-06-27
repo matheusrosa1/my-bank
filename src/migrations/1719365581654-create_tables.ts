@@ -17,7 +17,7 @@ export class CreateTables1719365581654 implements MigrationInterface {
       "id" SERIAL NOT NULL,
       "name" character varying NOT NULL,
       "type" character varying NOT NULL,
-      "balance" numeric NOT NULL,
+      "balance" integer NOT NULL,
       CONSTRAINT "PK_accounts" PRIMARY KEY ("id")
     )`);
 
@@ -25,8 +25,8 @@ export class CreateTables1719365581654 implements MigrationInterface {
       "id" SERIAL NOT NULL,
       "account_id" integer NOT NULL,
       "amount" numeric NOT NULL,
-      "date" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-      "description" character varying NOT NULL,
+      "date" DATE NOT NULL DEFAULT CURRENT_DATE,
+      "description" character varying,
       CONSTRAINT "PK_payments" PRIMARY KEY ("id"),
       CONSTRAINT "FK_payments_accounts" FOREIGN KEY ("account_id") REFERENCES "accounts"("id") ON DELETE NO ACTION ON UPDATE NO ACTION
     )`);

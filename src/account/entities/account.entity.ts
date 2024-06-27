@@ -1,4 +1,5 @@
 import { PaymentEntity } from 'src/payment/entities/payment.entity';
+import { TransactionReportEntity } from 'src/transaction-report/entities/transaction-report.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: 'accounts' })
@@ -17,4 +18,10 @@ export class AccountEntity {
 
   @OneToMany(() => PaymentEntity, (payment) => payment.account)
   payments: PaymentEntity[]; // Uma conta pode ter vários pagamentos
+
+  @OneToMany(
+    () => TransactionReportEntity,
+    (transactionReport) => transactionReport.account,
+  )
+  transactionReports: TransactionReportEntity[]; // Uma conta pode ter vários relatórios de transações
 }
