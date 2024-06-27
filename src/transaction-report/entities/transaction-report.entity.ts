@@ -7,7 +7,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-@Entity({ name: 'reports' })
+@Entity({ name: 'transaction_reports' })
 export class TransactionReportEntity {
   @PrimaryGeneratedColumn('rowid')
   id: number;
@@ -23,6 +23,9 @@ export class TransactionReportEntity {
 
   @Column('numeric', { name: 'totalAmount', scale: 2, nullable: false })
   totalAmount: number;
+
+  @Column({ type: 'jsonb', nullable: true })
+  payments: Record<string, any>;
 
   @ManyToOne(() => AccountEntity, (account) => account.transactionReports)
   @JoinColumn({ name: 'account_id' })

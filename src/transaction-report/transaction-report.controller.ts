@@ -1,18 +1,28 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { TransactionReportService } from './transaction-report.service';
 import { CreateTransactionReportDto } from './dto/create-transaction-report.dto';
 import { UpdateTransactionReportDto } from './dto/update-transaction-report.dto';
 
 @Controller('transaction-report')
 export class TransactionReportController {
-  constructor(private readonly transactionReportService: TransactionReportService) {}
+  constructor(
+    private readonly transactionReportService: TransactionReportService,
+  ) {}
 
   @Post()
   create(@Body() createTransactionReportDto: CreateTransactionReportDto) {
     return this.transactionReportService.create(createTransactionReportDto);
   }
 
-  @Get()
+  /*   @Get()
   findAll() {
     return this.transactionReportService.findAll();
   }
@@ -20,15 +30,15 @@ export class TransactionReportController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.transactionReportService.findOne(+id);
-  }
+  } */
 
-  @Patch(':id')
+  /*   @Patch(':id')
   update(@Param('id') id: string, @Body() updateTransactionReportDto: UpdateTransactionReportDto) {
     return this.transactionReportService.update(+id, updateTransactionReportDto);
-  }
-
+  } */
+  /* 
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.transactionReportService.remove(+id);
-  }
+  } */
 }

@@ -9,6 +9,7 @@ export class CreateReportsTable1719522118098 implements MigrationInterface {
             "startDate" DATE NOT NULL,
             "endDate" DATE NOT NULL,
             "totalAmount" NUMERIC NOT NULL,
+            "payments" JSONB NOT NULL DEFAULT '[]',
             CONSTRAINT "PK_reports" PRIMARY KEY ("id"),
             CONSTRAINT "FK_reports_accounts" FOREIGN KEY ("account_id") REFERENCES "accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE
           )

@@ -16,7 +16,7 @@ export class PaymentEntity {
   @Column({ name: 'account_id', nullable: false })
   accountId: number;
 
-  @Column('numeric', {
+  @Column({
     name: 'amount',
     scale: 2,
     nullable: false,

@@ -24,7 +24,7 @@ export class CreateTables1719365581654 implements MigrationInterface {
     await queryRunner.query(`CREATE TABLE "payments" (
       "id" SERIAL NOT NULL,
       "account_id" integer NOT NULL,
-      "amount" numeric NOT NULL,
+      "amount" integer NOT NULL,
       "date" DATE NOT NULL DEFAULT CURRENT_DATE,
       "description" character varying,
       CONSTRAINT "PK_payments" PRIMARY KEY ("id"),
