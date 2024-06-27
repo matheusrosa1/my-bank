@@ -7,7 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PaymentModule } from './payment/payment.module';
-import { TransactionModule } from './transaction/transaction.module';
+import { TransactionReportModule } from './transaction-report/transaction-report.module';
 
 @Module({
   imports: [
@@ -29,7 +29,7 @@ import { TransactionModule } from './transaction/transaction.module';
     AccountModule,
     AuthModule,
     PaymentModule,
-    TransactionModule,
+    TransactionReportModule,
   ],
   controllers: [AppController],
   providers: [AppService],
