@@ -1,7 +1,6 @@
 export class CreateUserDto {
-  name: string;
+  username: string;
   email: string;
-  password: string;
   cpf: string;
-  typeOfAccount: string;
+  password: string;
 }

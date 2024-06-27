@@ -9,6 +9,7 @@ import { hash } from 'bcrypt';
 import { UserEntity } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import validateCPF from 'src/utils/validateCPF';
 
 @Injectable()
 export class UserService {
@@ -18,17 +19,23 @@ export class UserService {
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<UserEntity> {
-    const user = await this.userRepository.findOne({
-      where: { cpf: createUserDto.cpf },
+    const { cpf, password } = createUserDto;
+
+    if (!validateCPF(cpf)) {
+      throw new NotFoundException('Invalid CPF');
+    }
+
+    const existingUser = await this.userRepository.findOne({
+      where: { cpf: cpf },
     });
 
-    if (user) {
-      throw new NotFoundException('User already exists');
+    if (existingUser) {
+      throw new UnauthorizedException('User already exists');
     }
 
     const saltOrRounds = 10;
 
-    const passwordHashed = await hash(createUserDto.password, saltOrRounds);
+    const passwordHashed = await hash(password, saltOrRounds);
 
     return this.userRepository.save({
       ...createUserDto,

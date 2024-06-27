@@ -1,13 +1,5 @@
 import { PaymentEntity } from 'src/payment/entities/payment.entity';
-import { UserEntity } from 'src/user/entities/user.entity';
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  OneToMany,
-  OneToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: 'accounts' })
 export class AccountEntity {
@@ -22,10 +14,6 @@ export class AccountEntity {
 
   @Column({ type: 'enum', enum: ['current', 'savings'], nullable: false })
   type: string;
-
-  @OneToOne(() => UserEntity, (user) => user.account)
-  @JoinColumn({ name: 'user_id' })
-  user: UserEntity; // Cada conta pertence a um usuário
 
   @OneToMany(() => PaymentEntity, (payment) => payment.account)
   payments: PaymentEntity[]; // Uma conta pode ter vários pagamentos

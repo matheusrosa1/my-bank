@@ -1,45 +1,32 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class SeedsUsersAccountsPayments1719431831878
-  implements MigrationInterface
-{
+export class SeedData1719365581655 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`
-            INSERT INTO users (name, email, cpf, password)
-            VALUES
-              ('João Silva', 'joao.silva@example.com', '123.456.789-00', 'senha123'),
-              ('Maria Souza', 'maria.souza@example.com', '987.654.321-00', 'senha456');
-        `);
+      INSERT INTO "users" ("username", "email", "cpf", "password")
+      VALUES
+        ('Alice Johnson', 'alice@example.com', '530.832.640-11', 'hashed_password1'),
+        ('Bob Smith', 'bob@example.com', '030.664.730-31', 'hashed_password2')
+    `);
 
     await queryRunner.query(`
-            INSERT INTO accounts (user_id, name, type, balance)
-            VALUES
-              ((SELECT id FROM users WHERE cpf = '123.456.789-00'), 'João Silva', 'corrente', 1000.00),
-              ((SELECT id FROM users WHERE cpf = '987.654.321-00'), 'Maria Souza', 'poupança', 500.00);
-        `);
+      INSERT INTO "accounts" ("name", "type", "balance")
+      VALUES
+        ('Alice Johnson', 'checking', 1500.00),
+        ('Bob Smith', 'savings', 2500.00)
+    `);
 
     await queryRunner.query(`
-            INSERT INTO payments (account_id, amount, date, description)
-            VALUES
-              ((SELECT id FROM accounts WHERE user_id = (SELECT id FROM users WHERE cpf = '123.456.789-00')), 200.00, CURRENT_TIMESTAMP, 'Pagamento de compra online'),
-              ((SELECT id FROM accounts WHERE user_id = (SELECT id FROM users WHERE cpf = '987.654.321-00')), 50.00, CURRENT_TIMESTAMP, 'Pagamento de serviço mensal');
-        `);
+      INSERT INTO "payments" ("account_id", "amount", "date", "description")
+      VALUES
+        (1, 200.00, '2024-01-01T10:00:00Z', 'Payment to XYZ'),
+        (2, 300.00, '2024-01-02T12:00:00Z', 'Payment to ABC')
+    `);
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(`
-            DELETE FROM payments
-            WHERE account_id IN (SELECT id FROM accounts WHERE user_id IN (SELECT id FROM users WHERE cpf IN ('123.456.789-00', '987.654.321-00')));
-        `);
-
-    await queryRunner.query(`
-            DELETE FROM accounts
-            WHERE user_id IN (SELECT id FROM users WHERE cpf IN ('123.456.789-00', '987.654.321-00'));
-        `);
-
-    await queryRunner.query(`
-            DELETE FROM users
-            WHERE cpf IN ('123.456.789-00', '987.654.321-00');
-        `);
+    await queryRunner.query(`DELETE FROM "payments"`);
+    await queryRunner.query(`DELETE FROM "accounts"`);
+    await queryRunner.query(`DELETE FROM "users"`);
   }
 }
