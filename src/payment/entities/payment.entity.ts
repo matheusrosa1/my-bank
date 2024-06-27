@@ -22,7 +22,7 @@ export class PaymentEntity {
   })
   amount: number;
 
-  @Column({ name: 'date', nullable: false })
+  @Column({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
   date: Date;
 
   @ManyToOne(() => AccountEntity, (account) => account.payments)
