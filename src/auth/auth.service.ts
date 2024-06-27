@@ -11,8 +11,8 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async signIn({ email, password }: SignInDto): Promise<{ token: string }> {
-    const user = await this.usersService.findByEmail(email);
+  async signIn({ username, password }: SignInDto): Promise<{ token: string }> {
+    const user = await this.usersService.findByUserName(username);
 
     const decodedPassword = compareSync(password, user.password);
 
@@ -20,7 +20,7 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    const payload = { sub: user.id, email: user.email };
+    const payload = { sub: user.id, email: user.username };
     const token = await this.jwtService.signAsync(payload);
     console.log(token);
     return { token };

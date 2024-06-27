@@ -18,13 +18,13 @@ export class UserService {
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<UserEntity> {
-    const user = await this.userRepository.findOne({
+    /*     const user = await this.userRepository.findOne({
       where: { cpf: createUserDto.cpf },
     });
-
-    if (user) {
+ */
+    /*     if (user) {
       throw new NotFoundException('User already exists');
-    }
+    } */
 
     const saltOrRounds = 10;
 
@@ -50,28 +50,38 @@ export class UserService {
     return user;
   }
 
+  async findByUserName(username: string): Promise<UserEntity> {
+    const user = await this.userRepository.findOne({ where: { username } });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    return user;
+  }
+
   async update(id: number, updateUserDto: UpdateUserDto) {
     const user = await this.userRepository.findOne({ where: { id } });
 
-    const allUsersByEmail = await this.userRepository.find({
+    /*     const allUsersByEmail = await this.userRepository.find({
       where: { email: updateUserDto.email },
     });
 
     if (updateUserDto.email && allUsersByEmail.length > 0) {
       throw new UnauthorizedException('Email already exists');
     }
-
+ */
     if (!user) {
       throw new NotFoundException('User not found');
     }
 
-    const allUsersByCpf = await this.userRepository.find({
+    /*     const allUsersByCpf = await this.userRepository.find({
       where: { cpf: updateUserDto.cpf },
     });
 
     if (updateUserDto.cpf && allUsersByCpf.length > 0) {
       throw new UnauthorizedException('CPF already exists');
-    }
+    } */
 
     return this.userRepository.save({
       ...user,
@@ -89,7 +99,7 @@ export class UserService {
     return this.userRepository.remove(user);
   }
 
-  async findByEmail(email: string): Promise<UserEntity> {
+  /*   async findByEmail(email: string): Promise<UserEntity> {
     return this.userRepository.findOne({ where: { email } });
-  }
+  } */
 }
