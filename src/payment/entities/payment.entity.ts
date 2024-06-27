@@ -22,6 +22,9 @@ export class PaymentEntity {
   })
   amount: number;
 
+  @Column({ name: 'description', nullable: false })
+  description: string;
+
   @Column({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
   date: Date;
 

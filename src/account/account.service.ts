@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { CreateAccountDto } from './dto/create-account.dto';
 import { UpdateAccountDto } from './dto/update-account.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -13,6 +17,11 @@ export class AccountService {
   ) {}
 
   async create(createAccountDto: CreateAccountDto) {
+    console.log(createAccountDto.balance);
+    if (createAccountDto.balance < 0) {
+      throw new UnauthorizedException('Invalid balance');
+    }
+
     return this.accountRepository.save(createAccountDto);
   }
 

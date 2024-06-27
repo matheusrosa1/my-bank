@@ -19,17 +19,21 @@ export class UserService {
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<UserEntity> {
-    const { cpf, password } = createUserDto;
+    const { cpf, password, email } = createUserDto;
 
     if (!validateCPF(cpf)) {
-      throw new NotFoundException('Invalid CPF');
+      throw new UnauthorizedException('Invalid CPF');
     }
 
     const existingUser = await this.userRepository.findOne({
       where: { cpf: cpf },
     });
 
-    if (existingUser) {
+    const existingUserByEmail = await this.userRepository.findOne({
+      where: { email: email },
+    });
+
+    if (existingUser || existingUserByEmail) {
       throw new UnauthorizedException('User already exists');
     }
 
