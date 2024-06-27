@@ -1,4 +1,9 @@
-import { Injectable, NotFoundException, UseGuards } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+  UseGuards,
+} from '@nestjs/common';
 import { CreatePaymentDto } from './dto/create-payment.dto';
 import { UpdatePaymentDto } from './dto/update-payment.dto';
 import { Repository } from 'typeorm';
@@ -29,7 +34,7 @@ export class PaymentService {
     }
 
     if (account.balance < amount) {
-      throw new NotFoundException('Insufficient funds');
+      throw new UnauthorizedException('Insufficient funds');
     }
 
     account.balance -= amount;
@@ -60,6 +65,10 @@ export class PaymentService {
 
     if (!payment) {
       throw new NotFoundException('Payment not found');
+    }
+
+    if (updatePaymentDto.amount) {
+      throw new UnauthorizedException('Amount cannot be updated');
     }
 
     if (updatePaymentDto.description !== undefined) {
