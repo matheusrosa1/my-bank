@@ -6,7 +6,7 @@ import {
 import { CreatePaymentDto } from './dto/create-payment.dto';
 import { Repository } from 'typeorm';
 import { PaymentEntity } from './entities/payment.entity';
-import { AccountEntity } from 'src/account/entities/account.entity';
+import { AccountEntity } from '../account/entities/account.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UpdatePaymentDto } from './dto/update-payment.dto';
 

@@ -9,7 +9,7 @@ import { hash } from 'bcrypt';
 import { UserEntity } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import validateCPF from 'src/utils/validateCPF';
+import validateCPF from '../utils/validateCPF';
 
 @Injectable()
 export class UserService {

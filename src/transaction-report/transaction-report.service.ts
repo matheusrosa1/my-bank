@@ -4,7 +4,7 @@ import { CreateTransactionReportDto } from './dto/create-transaction-report.dto'
 import { InjectRepository } from '@nestjs/typeorm';
 import { TransactionReportEntity } from './entities/transaction-report.entity';
 import { Between, Repository } from 'typeorm';
-import { PaymentEntity } from 'src/payment/entities/payment.entity';
+import { PaymentEntity } from '../payment/entities/payment.entity';
 import { UpdateTransactionReportDto } from './dto/update-transaction-report.dto';
 
 @Injectable()

@@ -1,5 +1,5 @@
-import { PaymentEntity } from 'src/payment/entities/payment.entity';
-import { TransactionReportEntity } from 'src/transaction-report/entities/transaction-report.entity';
+import { PaymentEntity } from '../../payment/entities/payment.entity';
+import { TransactionReportEntity } from '../../transaction-report/entities/transaction-report.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: 'accounts' })
