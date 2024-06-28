@@ -22,52 +22,108 @@
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
-## Description
+# My Bank API
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+API para gerenciamento de contas bancárias, transações e autenticação de usuários.
 
-## Installation
+## Índice
+
+- [Visão Geral](#visão-geral)
+- [Tecnologias Utilizadas](#tecnologias-utilizadas)
+- [Instalação](#instalação)
+- [Configuração do Banco de Dados](#configuração-do-banco-de-dados)
+- [Como Usar](#como-usar)
+- [Autenticação do Usuário](#autenticação-de-usuário)
+- [Licença](#licença)
+- [Contato](#contato)
+
+## Visão Geral
+
+A API My Bank permite a criação, gerenciamento de contas bancárias e transações, além da autenticação de usuários.
+
+## Tecnologias Utilizadas
+
+- NestJS
+- TypeScript
+- PostgreSQL
+- TypeORM
+- Docker
+- AWS S3 (para armazenamento de imagens)
+- Jest (para testes)
+
+## Instalação
+
+Para instalar e executar o projeto localmente, siga os passos abaixo:
+
+1. Clone o repositório:
+   ```bash
+   git clone https://github.com/seu-usuario/my-bank.git
+   cd my-bank
+   
+2. Instale as dependências:
+   ```bash
+    npm install
+
+3. Instação da imagem Docker Postgres
+
+        docker run --name meu-postgres -e POSTGRES_PASSWORD=minhaSenha -p 5432:5432 -d postgres
+
+
+  4. Configuração do arquivo .env
+
+  O arquivo .env deverá estar na pasta raiz do projeto e com denominação de `.env.development.local`
+  <br>
+  <br>
+  A estrutura do arquivo .env depende dos comandos que voce utilizou para instalação da imagem Docker. Por exemplo, utilizando o comando disponibilizado acima, a configuração ficaria dessa forma:
+  
+    DB_DATABASE=postgres
+    DB_HOST=localhost
+    DB_PORT=5432
+    DB_USERNAME=meu-postgres
+    DB_PASSWORD=postgres
+
+Para que o upload das imagens funcione é necessário incluir o arquivo `.env.aws` na raiz do projeto. Para ter acesso a esse recurso contate-me.
+
+4. Rodando o servidor
 
 ```bash
-$ npm install
-```
-
-## Running the app
-
-```bash
-# development
-$ npm run start
-
-# watch mode
+# Iniciar servidor
 $ npm run start:dev
 
-# production mode
-$ npm run start:prod
 ```
 
-## Test
+## Autenticação do Usuário
+
+Para autenticar um usuário, primeiro é necesśario cadastrar um user utilizando o endpoint POST `/users`. Com os seguintes campos:
+```bash
+{
+  "username": "john123",
+  "email": "john@example.com",
+  "password": "password123",
+  "cpf": "123.456.789-00"
+}
+```
+
+
+E após o cadastro autenticar o usuário no endpoint POST `auth` (utilizando o `email` e o `password` cadastrado) e o mesmo irá retonar um token que deverá ser utilizado nas demais requisições, no seguinte formado:
+
+Bearer `token`
+
+## Testando a aplicação
+
+Para elaboração de testes do projeto foram realizados teste unitários utilizando o Jest.
 
 ```bash
-# unit tests
+# Rodando os testes
 $ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
 ```
 
-## Support
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+## Licença
 
-## Stay in touch
+Este projeto está licenciado sob a [MIT licensed](https://github.com/matheusrosa1/my-bank?tab=MIT-1-ov-file).
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+## Contato
 
-## License
+- [Linkedin](https://www.linkedin.com/in/matheus-rosa-dev/)
 
-Nest is [MIT licensed](LICENSE).
