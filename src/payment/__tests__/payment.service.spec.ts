@@ -9,6 +9,7 @@ import { AccountEntity } from '../../account/entities/account.entity';
 import { PaymentService } from '../payment.service';
 import { PaymentEntity } from '../entities/payment.entity';
 import { CreatePaymentDto } from '../dto/create-payment.dto';
+import { UpdatePaymentDto } from '../dto/update-payment.dto';
 
 describe('PaymentService', () => {
   let service: PaymentService;
@@ -163,6 +164,162 @@ describe('PaymentService', () => {
 
       expect(result).toEqual([]);
       expect(paymentRepository.find).toHaveBeenCalled();
+    });
+  });
+  describe('findOne', () => {
+    it('should return a payment object if found', async () => {
+      const paymentId = 1;
+      const mockPayment: PaymentEntity = {
+        id: paymentId,
+        accountId: 1,
+        amount: 100,
+        description: 'Payment 1',
+        date: new Date(),
+        imageUrl: 'https://example.com/image1.jpg',
+        account: new AccountEntity(), // Simula uma conta associada
+      };
+
+      jest.spyOn(paymentRepository, 'findOne').mockResolvedValue(mockPayment);
+
+      const result = await service.findOne(paymentId);
+      expect(result).toBe(mockPayment);
+      expect(paymentRepository.findOne).toHaveBeenCalledWith({
+        where: { id: paymentId },
+      });
+    });
+  });
+  describe('update', () => {
+    it('should update payment description if found', async () => {
+      const paymentId = 1;
+      const updatePaymentDto: UpdatePaymentDto = {
+        description: 'Updated description',
+      };
+
+      // Simula uma conta associada ao pagamento
+      const mockAccount: AccountEntity = {
+        id: 1,
+        name: 'Test Account',
+        type: 'current',
+        balance: 1000,
+        payments: [],
+        transactionReports: [],
+      };
+
+      const existingPayment: PaymentEntity = {
+        id: paymentId,
+        accountId: mockAccount.id,
+        amount: 100,
+        description: 'Payment 1',
+        date: new Date(),
+        imageUrl: 'https://example.com/image1.jpg',
+        account: mockAccount, // Adiciona a conta associada
+      };
+
+      jest
+        .spyOn(paymentRepository, 'findOne')
+        .mockResolvedValue(existingPayment);
+      jest.spyOn(paymentRepository, 'save').mockResolvedValue(existingPayment); // Simula save
+
+      const result = await service.update(paymentId, updatePaymentDto);
+
+      expect(result).toEqual(existingPayment);
+      expect(result.description).toEqual(updatePaymentDto.description);
+      expect(paymentRepository.findOne).toHaveBeenCalledWith({
+        where: { id: paymentId },
+      });
+      expect(paymentRepository.save).toHaveBeenCalledWith(existingPayment);
+    });
+
+    it('should throw UnauthorizedException if trying to update amount', async () => {
+      const paymentId = 1;
+      const updatePaymentDto: UpdatePaymentDto = {
+        amount: 200, // Tentativa de atualizar o valor
+      };
+
+      // Simula uma conta associada ao pagamento
+      const mockAccount: AccountEntity = {
+        id: 1,
+        name: 'Test Account',
+        type: 'current',
+        balance: 1000,
+        payments: [],
+        transactionReports: [],
+      };
+
+      const existingPayment: PaymentEntity = {
+        id: paymentId,
+        accountId: mockAccount.id,
+        amount: 100,
+        description: 'Payment 1',
+        date: new Date(),
+        imageUrl: 'https://example.com/image1.jpg',
+        account: mockAccount, // Adiciona a conta associada
+      };
+
+      jest
+        .spyOn(paymentRepository, 'findOne')
+        .mockResolvedValue(existingPayment);
+
+      await expect(service.update(paymentId, updatePaymentDto)).rejects.toThrow(
+        UnauthorizedException,
+      );
+      expect(paymentRepository.findOne).toHaveBeenCalledWith({
+        where: { id: paymentId },
+      });
+    });
+
+    it('should throw NotFoundException if payment is not found', async () => {
+      const paymentId = 999; // Assume payment with ID 999 does not exist
+      const updatePaymentDto: UpdatePaymentDto = {
+        description: 'Updated description',
+      };
+
+      jest.spyOn(paymentRepository, 'findOne').mockResolvedValue(null);
+
+      await expect(service.update(paymentId, updatePaymentDto)).rejects.toThrow(
+        NotFoundException,
+      );
+      expect(paymentRepository.findOne).toHaveBeenCalledWith({
+        where: { id: paymentId },
+      });
+    });
+  });
+  describe('remove', () => {
+    it('should remove payment if found', async () => {
+      const paymentId = 1;
+
+      const mockAccount: AccountEntity = {
+        id: 1,
+        name: 'Test Account',
+        type: 'current',
+        balance: 1000,
+        payments: [],
+        transactionReports: [],
+      };
+
+      const existingPayment: PaymentEntity = {
+        id: paymentId,
+        accountId: mockAccount.id,
+        amount: 100,
+        description: 'Payment 1',
+        date: new Date(),
+        imageUrl: 'https://example.com/image1.jpg',
+        account: mockAccount, // Adiciona a conta associada
+      };
+
+      jest
+        .spyOn(paymentRepository, 'findOne')
+        .mockResolvedValue(existingPayment);
+      jest
+        .spyOn(paymentRepository, 'remove')
+        .mockResolvedValue(existingPayment); // Simula remove
+
+      await service.remove(paymentId);
+
+      expect(paymentRepository.findOne).toHaveBeenCalledWith({
+        where: { id: paymentId },
+      });
+      expect(paymentRepository.remove).toHaveBeenCalledWith(existingPayment);
     });
   });
 });

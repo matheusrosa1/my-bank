@@ -13,7 +13,7 @@ export class AccountEntity {
   @Column('numeric', { name: 'balance', scale: 2, nullable: false })
   balance: number;
 
-  @Column({ type: 'enum', enum: ['current', 'savings'], nullable: false })
+  @Column({ type: 'enum', enum: ['checking', 'savings'], nullable: false })
   type: string;
 
   @OneToMany(() => PaymentEntity, (payment) => payment.account)

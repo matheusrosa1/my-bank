@@ -59,7 +59,11 @@ export class PaymentService {
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} payment`;
+    const payment = this.paymentRepository.findOne({ where: { id } });
+    if (!payment) {
+      throw new NotFoundException('Payment not found');
+    }
+    return payment;
   }
 
   async update(id: number, updatePaymentDto: UpdatePaymentDto) {
@@ -80,8 +84,14 @@ export class PaymentService {
     return this.paymentRepository.save(payment);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} payment`;
+  async remove(id: number) {
+    const payment = await this.paymentRepository.findOne({ where: { id } });
+
+    if (!payment) {
+      throw new NotFoundException('Payment not found');
+    }
+
+    return this.paymentRepository.remove(payment);
   }
 
   async salvarUrlDaImagem(url: string, paymentId: number): Promise<boolean> {
