@@ -110,21 +110,12 @@ describe('AccountService', () => {
 
   describe('update', () => {
     it('should update an account successfully', async () => {
-      const existingAccount: AccountEntity = {
-        id: 1,
-        name: 'Original Name',
-        balance: 1200,
-        type: 'current',
-        payments: [],
-        transactionReports: [],
-      };
-
       // Mock findOne to return the existing account
-      jest.spyOn(service, 'findOne').mockResolvedValue(existingAccount);
+      jest.spyOn(service, 'findOne').mockResolvedValue(AccountEntityMock);
 
       // Mock save method of repository
       const saveSpy = jest.spyOn(repository, 'save').mockResolvedValue({
-        ...existingAccount,
+        ...AccountEntityMock,
         ...updateDto,
       });
 
@@ -140,7 +131,7 @@ describe('AccountService', () => {
 
       // Ensure save was called with the updated account
       expect(saveSpy).toHaveBeenCalledWith({
-        ...existingAccount,
+        ...AccountEntityMock,
         ...updateDto,
       });
     });
@@ -154,57 +145,51 @@ describe('AccountService', () => {
         type: 'current',
       };
 
-      await expect(service.update(invalidId, updateDto)).rejects.toThrowError(
-        NotFoundException,
-      );
+      try {
+        await service.update(invalidId, updateDto);
+      } catch (error) {
+        expect(error).toBeInstanceOf(NotFoundException);
+        expect(error.message).toBe('Account not found');
+      }
     });
 
     it('should throw UnauthorizedException when trying to update balance', async () => {
       const updateDto: UpdateAccountDto = {
-        balance: 1500, // Tentativa de atualizar o saldo
+        balance: 1500,
       };
 
-      const existingAccount: AccountEntity = {
-        id: 1,
-        name: 'Original Name',
-        balance: 1200,
-        type: 'current',
-        payments: [],
-        transactionReports: [],
-      };
-      jest.spyOn(service, 'findOne').mockResolvedValue(existingAccount);
+      jest.spyOn(service, 'findOne').mockResolvedValue(AccountEntityMock);
 
-      await expect(service.update(1, updateDto)).rejects.toThrowError(
-        UnauthorizedException,
-      );
+      try {
+        await service.update(1, updateDto);
+      } catch (error) {
+        expect(error).toBeInstanceOf(UnauthorizedException);
+        expect(error.message).toBe('Balance cannot be updated');
+      }
     });
   });
 
   describe('remove', () => {
     it('should remove an account successfully', async () => {
-      const existingAccount: AccountEntity = {
-        id: 1,
-        name: 'Account to Remove',
-        balance: 800,
-        type: 'savings',
-        payments: [],
-        transactionReports: [],
-      };
-      jest.spyOn(service, 'findOne').mockResolvedValue(existingAccount);
-      jest.spyOn(repository, 'remove').mockResolvedValue(existingAccount);
+      jest.spyOn(service, 'findOne').mockResolvedValue(AccountEntityMock);
+      jest.spyOn(repository, 'remove').mockResolvedValue(AccountEntityMock);
 
       const deletedAccount = await service.remove(1);
       expect(deletedAccount).toBeDefined();
-      expect(deletedAccount).toEqual(existingAccount);
+      expect(deletedAccount).toEqual(AccountEntityMock);
     });
 
     it('should throw NotFoundException when account is not found', async () => {
-      jest.spyOn(service, 'findOne').mockResolvedValue(undefined); // Simula que nenhum conta foi encontrada
+      jest.spyOn(service, 'findOne').mockResolvedValue(undefined);
 
-      const invalidId = 999; // ID inválido
-      await expect(service.remove(invalidId)).rejects.toThrowError(
-        NotFoundException,
-      );
+      const invalidId = 999;
+
+      try {
+        await service.remove(invalidId);
+      } catch (error) {
+        expect(error).toBeInstanceOf(NotFoundException);
+        expect(error.message).toBe('Account not found');
+      }
     });
   });
 });
