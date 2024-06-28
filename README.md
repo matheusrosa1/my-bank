@@ -72,8 +72,7 @@ Para instalar e executar o projeto localmente, siga os passos abaixo:
   4. Configuração do arquivo .env
 
   O arquivo .env deverá estar na pasta raiz do projeto e com denominação de `.env.development.local`
-  <br>
-  <br>
+ 
   A estrutura do arquivo .env depende dos comandos que voce utilizou para instalação da imagem Docker. Por exemplo, utilizando o comando disponibilizado acima, a configuração ficaria dessa forma:
   
     DB_DATABASE=postgres
@@ -94,7 +93,9 @@ $ npm run start:dev
 
 ## Autenticação do Usuário
 
+1. Criar um usuário
 Para autenticar um usuário, primeiro é necesśario cadastrar um user utilizando o endpoint POST `/users`. Com os seguintes campos:
+
 ```bash
 {
   "username": "john123",
@@ -104,9 +105,18 @@ Para autenticar um usuário, primeiro é necesśario cadastrar um user utilizand
 }
 ```
 
+2. Autenticação
+E após o cadastro autenticar o usuário no endpoint POST `auth` (utilizando o `email` e o `password` cadastrado)
 
-E após o cadastro autenticar o usuário no endpoint POST `auth` (utilizando o `email` e o `password` cadastrado) e o mesmo irá retonar um token que deverá ser utilizado nas demais requisições, no seguinte formado:
-
+```bash
+{
+  "email": "john@example.com",
+  "password": "password123",
+}
+```
+3. Token
+Após a autenticação irá ser retornado um token que deverá ser utilizado nas demais requisições exatamente desta forma:
+<br>
 Bearer `token`
 
 ## Testando a aplicação
