@@ -1,10 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateTransactionReportDto } from './dto/create-transaction-report.dto';
 
 import { InjectRepository } from '@nestjs/typeorm';
 import { TransactionReportEntity } from './entities/transaction-report.entity';
 import { Between, Repository } from 'typeorm';
 import { PaymentEntity } from 'src/payment/entities/payment.entity';
+import { UpdateTransactionReportDto } from './dto/update-transaction-report.dto';
 
 @Injectable()
 export class TransactionReportService {
@@ -46,21 +47,52 @@ export class TransactionReportService {
     return this.transactionReportRepository.save(report);
   }
 
-  findAll() {
+  async findAll() {
     return this.transactionReportRepository.find();
   }
 
-  findOne(id: number) {
-    return this.transactionReportRepository.findOne({
+  async findOne(id: number) {
+    const report = this.transactionReportRepository.findOne({
       where: { id },
     });
+
+    if (!report) {
+      throw new NotFoundException('Report not found');
+    }
+
+    return report;
   }
 
-  /*   update(id: number, updateTransactionReportDto: UpdateTransactionReportDto) {
-    return `This action updates a #${id} transactionReport`;
-  } */
+  async update(
+    id: number,
+    updateTransactionReportDto: UpdateTransactionReportDto,
+  ) {
+    const { accountId, startDate, endDate } = updateTransactionReportDto;
 
-  remove(id: number) {
-    return `This action removes a #${id} transactionReport`;
+    const report = await this.transactionReportRepository.findOne({
+      where: { id },
+    });
+
+    if (!report) {
+      throw new NotFoundException(`Report with ID ${id} not found`);
+    }
+
+    if (accountId !== undefined) report.accountId = accountId;
+    if (startDate !== undefined) report.startDate = new Date(startDate);
+    if (endDate !== undefined) report.endDate = new Date(endDate);
+
+    return this.transactionReportRepository.save(report);
+  }
+
+  async remove(id: number) {
+    const report = this.transactionReportRepository.findOne({
+      where: { id },
+    });
+
+    if (!report) {
+      throw new NotFoundException('Report not found');
+    }
+
+    return this.transactionReportRepository.delete({ id });
   }
 }

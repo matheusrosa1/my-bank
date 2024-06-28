@@ -8,6 +8,7 @@ import { Repository } from 'typeorm';
 import { PaymentEntity } from './entities/payment.entity';
 import { AccountEntity } from 'src/account/entities/account.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { UpdatePaymentDto } from './dto/update-payment.dto';
 
 @Injectable()
 export class PaymentService {
@@ -61,7 +62,6 @@ export class PaymentService {
     return `This action returns a #${id} payment`;
   }
 
-  /*   @UseGuards(AuthGuard('jwt'))
   async update(id: number, updatePaymentDto: UpdatePaymentDto) {
     const payment = await this.paymentRepository.findOne({ where: { id } });
 
@@ -78,9 +78,9 @@ export class PaymentService {
     }
 
     return this.paymentRepository.save(payment);
-  } */
+  }
 
-  /*   remove(id: number) {
+  remove(id: number) {
     return `This action removes a #${id} payment`;
-  } */
+  }
 }

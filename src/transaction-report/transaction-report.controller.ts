@@ -22,7 +22,7 @@ export class TransactionReportController {
     return this.transactionReportService.create(createTransactionReportDto);
   }
 
-  /*   @Get()
+  @Get()
   findAll() {
     return this.transactionReportService.findAll();
   }
@@ -30,15 +30,21 @@ export class TransactionReportController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.transactionReportService.findOne(+id);
-  } */
+  }
 
-  /*   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTransactionReportDto: UpdateTransactionReportDto) {
-    return this.transactionReportService.update(+id, updateTransactionReportDto);
-  } */
-  /* 
+  @Patch(':id')
+  update(
+    @Param('id') id: string,
+    @Body() updateTransactionReportDto: UpdateTransactionReportDto,
+  ) {
+    return this.transactionReportService.update(
+      +id,
+      updateTransactionReportDto,
+    );
+  }
+
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.transactionReportService.remove(+id);
-  } */
+  }
 }
