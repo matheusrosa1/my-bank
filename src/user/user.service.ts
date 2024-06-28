@@ -64,16 +64,16 @@ export class UserService {
   async update(id: number, updateUserDto: UpdateUserDto) {
     const user = await this.userRepository.findOne({ where: { id } });
 
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
     const allUsersByEmail = await this.userRepository.find({
       where: { email: updateUserDto.email },
     });
 
     if (updateUserDto.email && allUsersByEmail.length > 0) {
       throw new UnauthorizedException('Email already exists');
-    }
-
-    if (!user) {
-      throw new NotFoundException('User not found');
     }
 
     const allUsersByCpf = await this.userRepository.find({
