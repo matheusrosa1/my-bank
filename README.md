@@ -26,32 +26,67 @@
 
 API para gerenciamento de contas bancárias, transações e autenticação de usuários.
 
-## Installation
+## Índice
 
-docker run --name some-postgres -e POSTGRES_PASSWORD=mysecretpassword -p 5432:5432 -d postgres
- 
-DB_HOST=localhost
-DB_USERNAME=postgres
-DB_PASSWORD=mysecretpassword
-DB_PORT=5432
+- [Visão Geral](#visão-geral)
+- [Tecnologias Utilizadas](#tecnologias-utilizadas)
+- [Instalação](#instalação)
+- [Configuração do Banco de Dados](#configuração-do-banco-de-dados)
+- [Como Usar](#como-usar)
+- [Autenticação de Usuário](#autenticação-de-usuário)
+- [Contribuição](#contribuição)
+- [Licença](#licença)
+- [Contato](#contato)
+
+## Visão Geral
+
+A API My Bank permite a criação, gerenciamento de contas bancárias e transações, além da autenticação de usuários.
+
+## Tecnologias Utilizadas
+
+- NestJS
+- TypeScript
+- PostgreSQL
+- TypeORM
+- Docker
+- AWS S3 (para armazenamento de imagens)
+- Jest (para testes)
+
+## Instalação
+
+Para instalar e executar o projeto localmente, siga os passos abaixo:
+
+1. Clone o repositório:
+   ```bash
+   git clone https://github.com/seu-usuario/my-bank.git
+   cd my-bank
+   
+2. Instale as dependências:
+   ```bash
+    npm install
+
+3. Configurar banco de dados
+   
+Para subir um banco de dados PostgreSQL via Docker, execute o seguinte comando:
+
+    docker run --name meu-postgres -e POSTGRES_PASSWORD=minhaSenha -p 5432:5432 -d postgres
+
+
+O arquivo .env deve denominar-se .env.development.local e sua configuração depende do comando utilizado acima, por exemplo, no caso utilizando o comando cima a configuração seria ficaria dessa forma:
+
 DB_DATABASE=postgres
+DB_HOST=localhost
+DB_PORT=5432
+DB_USERNAME=meu-postgres
+DB_PASSWORD=postgres
 
+
+##Running the app
 
 ```bash
-$ npm install
-```
-
-## Running the app
-
-```bash
-# development
-$ npm run start
-
-# watch mode
+# Iniciar servidor
 $ npm run start:dev
 
-# production mode
-$ npm run start:prod
 ```
 
 ## Test
@@ -60,8 +95,6 @@ $ npm run start:prod
 # unit tests
 $ npm run test
 
-# e2e tests
-$ npm run test:e2e
 
 # test coverage
 $ npm run test:cov
