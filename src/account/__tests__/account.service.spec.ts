@@ -3,16 +3,16 @@ import { AccountService } from '../account.service';
 import { Repository } from 'typeorm';
 import { AccountEntity } from '../entities/account.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { CreateAccountDto } from '../dto/create-account.dto';
 import { UpdateAccountDto } from '../dto/update-account.dto';
 import { UnauthorizedException, NotFoundException } from '@nestjs/common';
-import { AccountEntityMock, AccountsEntityMock } from './account.mock';
 import {
+  AccountEntityMock,
+  AccountsEntityMock,
   createAccountMock,
   invalidAccountTypeMock,
   negativeBalanceAccountMock,
   updateDto,
-} from './createAccount.mock';
+} from '../__mocks__/account.mock';
 
 describe('AccountService', () => {
   let service: AccountService;

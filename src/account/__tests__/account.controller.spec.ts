@@ -1,11 +1,16 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AccountController } from '../account.controller';
 import { AccountService } from '../account.service';
-import { CreateAccountDto } from '../dto/create-account.dto';
-import { UpdateAccountDto } from '../dto/update-account.dto';
+
 import { AccountEntity } from '../entities/account.entity';
-import { createAccountMock } from './createAccount.mock';
-import { AccountEntityMock, AccountsEntityMock } from './account.mock';
+
+import {
+  AccountEntityMock,
+  AccountsEntityMock,
+  createAccountMock,
+  mockUpdatedAccount,
+  updateDto,
+} from '../__mocks__/account.mock';
 
 describe('AccountController', () => {
   let controller: AccountController;
@@ -73,60 +78,25 @@ describe('AccountController', () => {
     expect(account).toEqual(AccountEntityMock);
     expect(accountService.findOne).toHaveBeenCalledWith(+accountId);
   });
-  /*   it('should find an account by id', async () => {
-    const mockAccount: CreateAccountDto = {
-      name: 'Account1',
-      balance: 1000,
-      type: 'current',
-      payments: [],
-      transactionReports: [],
-    };
-
-    accountService.findOne.mockResolvedValue(mockAccount);
-
-    const account = await controller.findOne('1');
-
-    expect(account).toEqual(mockAccount);
-    expect(accountService.findOne).toHaveBeenCalledWith(1);
-  });
-
   it('should update an account', async () => {
-    const updateDto: UpdateAccountDto = {
-      name: 'Updated Account Name',
-      balance: 2000,
-      type: 'savings',
-    };
+    const accountId = '1';
 
-    const mockUpdatedAccount: AccountEntity = {
-      id: 1,
-      ...updateDto,
-      payments: [],
-      transactionReports: [],
-    };
+    jest.spyOn(accountService, 'update').mockResolvedValue(mockUpdatedAccount);
 
-    accountService.update.mockResolvedValue(mockUpdatedAccount);
-
-    const updatedAccount = await controller.update('1', updateDto);
+    const updatedAccount = await controller.update(accountId, updateDto);
 
     expect(updatedAccount).toEqual(mockUpdatedAccount);
-    expect(accountService.update).toHaveBeenCalledWith(1, updateDto);
+    expect(accountService.update).toHaveBeenCalledWith(+accountId, updateDto);
   });
 
   it('should remove an account', async () => {
-    const mockDeletedAccount: AccountEntity = {
-      id: 1,
-      name: 'DeletedAccount',
-      balance: 1000,
-      type: 'current',
-      payments: [],
-      transactionReports: [],
-    };
+    const accountId = '1';
 
-    accountService.remove.mockResolvedValue(mockDeletedAccount);
+    jest.spyOn(accountService, 'remove').mockResolvedValue(AccountEntityMock);
 
-    const deletedAccount = await controller.remove('1');
+    const removedAccount = await controller.remove(accountId);
 
-    expect(deletedAccount).toEqual(mockDeletedAccount);
-    expect(accountService.remove).toHaveBeenCalledWith(1);
-  });  */
+    expect(removedAccount).toEqual(AccountEntityMock);
+    expect(accountService.remove).toHaveBeenCalledWith(+accountId);
+  });
 });
