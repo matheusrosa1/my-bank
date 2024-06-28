@@ -34,8 +34,6 @@ export class TransactionReportService {
       0,
     );
 
-    console.log('totalAmount:', totalAmount);
-
     const report = this.transactionReportRepository.create({
       accountId,
       payments,
