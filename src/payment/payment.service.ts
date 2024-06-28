@@ -113,7 +113,7 @@ export class PaymentService {
       return { message: 'Nenhum arquivo foi enviado' };
     }
 
-    const imageUrl = file.location; // A URL pública da imagem após o upload para o S3
+    const imageUrl = file.location;
     const success = await this.salvarUrlDaImagem(imageUrl, paymentId);
 
     if (success) {
