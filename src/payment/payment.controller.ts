@@ -4,7 +4,7 @@ import {
   Post,
   Body,
   Param,
-  UseGuards,
+  /*   UseGuards, */
   Delete,
   Patch,
   UseInterceptors,

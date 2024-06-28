@@ -3,6 +3,9 @@ import { S3Client } from '@aws-sdk/client-s3';
 import * as path from 'path';
 import { v4 as uuidv4 } from 'uuid';
 
+import * as dotenv from 'dotenv';
+dotenv.config({ path: '.env.aws' });
+
 const s3Config = new S3Client({
   region: process.env.AWS_REGION, //região
   credentials: {
@@ -14,9 +17,9 @@ const s3Config = new S3Client({
 const multerConfig = {
   storage: multerS3({
     s3: s3Config,
-    bucket: 'artigo-tw-s3',
+    bucket: 'upload-payments-mybank',
     contentType: multerS3.AUTO_CONTENT_TYPE,
-    acl: 'public-read',
+    acl: process.env.ACL,
     key: (req, file, cb) => {
       const fileName =
         path.parse(file.originalname).name.replace(/\s/g, '') + '-' + uuidv4();
