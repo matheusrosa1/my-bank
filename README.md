@@ -33,8 +33,7 @@ API para gerenciamento de contas bancárias, transações e autenticação de us
 - [Instalação](#instalação)
 - [Configuração do Banco de Dados](#configuração-do-banco-de-dados)
 - [Como Usar](#como-usar)
-- [Autenticação de Usuário](#autenticação-de-usuário)
-- [Contribuição](#contribuição)
+- [Autenticação do Usuário](#autenticação-de-usuário)
 - [Licença](#licença)
 - [Contato](#contato)
 
@@ -65,23 +64,25 @@ Para instalar e executar o projeto localmente, siga os passos abaixo:
    ```bash
     npm install
 
-3. Configurar banco de dados
-   
-Para subir um banco de dados PostgreSQL via Docker, execute o seguinte comando:
+3. Instação da imagem Docker Postgres
 
-    docker run --name meu-postgres -e POSTGRES_PASSWORD=minhaSenha -p 5432:5432 -d postgres
+        docker run --name meu-postgres -e POSTGRES_PASSWORD=minhaSenha -p 5432:5432 -d postgres
 
 
-### Pontos importantes para funcionamento do projeto
-adicionar um arquivo .env.development.local com o seguinte corpo:
+  4. Configuração do arquivo .env
 
+  O arquivo .env deverá estar na pasta raiz do projeto e com denominação de `.env.development.local`
+  <br>
+  <br>
+  A estrutura do arquivo .env depende dos comandos que voce utilizou para instalação da imagem Docker. Por exemplo, utilizando o comando disponibilizado acima, a configuração ficaria dessa forma:
+  
     DB_DATABASE=postgres
     DB_HOST=localhost
     DB_PORT=5432
     DB_USERNAME=meu-postgres
     DB_PASSWORD=postgres
 
-Para que o upload das imagens funcione é necessário incluir o arquivo .env.aws na raiz do projeto. Para ter acesso a esse recurso contate-me.
+Para que o upload das imagens funcione é necessário incluir o arquivo `.env.aws` na raiz do projeto. Para ter acesso a esse recurso contate-me.
 
 4. Rodando o servidor
 
@@ -118,6 +119,6 @@ $ npm run test
 ```
 
 
-## License
+## Licença
 
-Este projeto está licenciado sob a [MIT licensed]((https://github.com/matheusrosa1/my-bank?tab=MIT-1-ov-file)).
+Este projeto está licenciado sob a [MIT licensed](https://github.com/matheusrosa1/my-bank?tab=MIT-1-ov-file).
