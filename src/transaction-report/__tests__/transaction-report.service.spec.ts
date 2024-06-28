@@ -5,12 +5,16 @@ import { TransactionReportEntity } from '../entities/transaction-report.entity';
 import { PaymentEntity } from '../../payment/entities/payment.entity';
 import { CreateTransactionReportDto } from '../dto/create-transaction-report.dto';
 import { Between } from 'typeorm';
+import { NotFoundException } from '@nestjs/common';
 
 describe('TransactionReportService', () => {
   let service: TransactionReportService;
   const transactionReportRepositoryMock = {
     create: jest.fn(),
     save: jest.fn(),
+    find: jest.fn(),
+    findOne: jest.fn(),
+    delete: jest.fn(),
   };
   const paymentRepositoryMock = {
     find: jest.fn(),
@@ -91,6 +95,131 @@ describe('TransactionReportService', () => {
           createTransactionReportDto.endDate,
         ),
       },
+    });
+  });
+  it('should find all transaction reports', async () => {
+    const transactionReports = [
+      {
+        id: 1,
+        accountId: 1,
+        startDate: new Date('2024-01-01'),
+        endDate: new Date('2024-01-31'),
+      },
+      {
+        id: 2,
+        accountId: 2,
+        startDate: new Date('2024-02-01'),
+        endDate: new Date('2024-02-28'),
+      },
+    ];
+
+    transactionReportRepositoryMock.find.mockResolvedValue(
+      transactionReports as any,
+    );
+
+    const result = await service.findAll();
+
+    expect(result).toEqual(transactionReports);
+    expect(transactionReportRepositoryMock.find).toHaveBeenCalled();
+  });
+  it('should find one transaction report', async () => {
+    const reportId = 1;
+    const report = {
+      id: reportId,
+      accountId: 1,
+      startDate: new Date('2024-01-01'),
+      endDate: new Date('2024-01-31'),
+    };
+
+    transactionReportRepositoryMock.findOne.mockResolvedValue(report as any);
+
+    const result = await service.findOne(reportId);
+
+    expect(result).toEqual(report);
+    expect(transactionReportRepositoryMock.findOne).toHaveBeenCalledWith({
+      where: { id: reportId },
+    });
+  });
+
+  it('should throw NotFoundException if report is not found', async () => {
+    const reportId = 999; // Um ID que não existe
+
+    transactionReportRepositoryMock.findOne.mockResolvedValue(null);
+
+    try {
+      await service.findOne(reportId);
+    } catch (error) {
+      expect(error).toBeInstanceOf(NotFoundException);
+      expect(error.message).toBe('Report not found');
+    }
+
+    expect(transactionReportRepositoryMock.findOne).toHaveBeenCalledWith({
+      where: { id: reportId },
+    });
+  });
+  it('should update a transaction report', async () => {
+    const reportId = 1;
+    const updateDto: any = {
+      accountId: 2,
+      startDate: '2024-02-01',
+      endDate: '2024-02-28',
+    };
+    const report = {
+      id: reportId,
+      accountId: 1,
+      startDate: new Date('2024-01-01'),
+      endDate: new Date('2024-01-31'),
+    };
+
+    transactionReportRepositoryMock.findOne.mockResolvedValue(report);
+    transactionReportRepositoryMock.save.mockResolvedValue(report as any);
+
+    const result = await service.update(reportId, updateDto);
+
+    expect(result).toEqual(report);
+    expect(transactionReportRepositoryMock.findOne).toHaveBeenCalledWith({
+      where: { id: reportId },
+    });
+    expect(transactionReportRepositoryMock.save).toHaveBeenCalledWith(report);
+  });
+
+  it('should throw NotFoundException if report is not found during update', async () => {
+    const reportId = 999; // Um ID que não existe
+    const updateDto: any = {
+      startDate: '2024-02-01',
+      endDate: '2024-02-28',
+    };
+
+    transactionReportRepositoryMock.findOne.mockResolvedValue(null);
+
+    await expect(service.update(reportId, updateDto)).rejects.toThrowError(
+      NotFoundException,
+    );
+    expect(transactionReportRepositoryMock.findOne).toHaveBeenCalledWith({
+      where: { id: reportId },
+    });
+    expect(transactionReportRepositoryMock.save).not.toHaveBeenCalled();
+  });
+  it('should remove a transaction report', async () => {
+    const reportId = 1;
+    const report = {
+      id: reportId,
+      accountId: 1,
+      startDate: new Date('2024-01-01'),
+      endDate: new Date('2024-01-31'),
+    };
+
+    transactionReportRepositoryMock.findOne.mockResolvedValue(report);
+    transactionReportRepositoryMock.delete.mockResolvedValue({ affected: 1 });
+
+    const result = await service.remove(reportId);
+
+    expect(result).toEqual({ affected: 1 });
+    expect(transactionReportRepositoryMock.findOne).toHaveBeenCalledWith({
+      where: { id: reportId },
+    });
+    expect(transactionReportRepositoryMock.delete).toHaveBeenCalledWith({
+      id: reportId,
     });
   });
 });
