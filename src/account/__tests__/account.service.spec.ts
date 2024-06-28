@@ -25,6 +25,11 @@ describe('AccountService', () => {
         {
           provide: getRepositoryToken(AccountEntity),
           useClass: Repository,
+          useValue: {
+            save: jest
+              .fn()
+              .mockResolvedValue((entity: AccountEntity) => entity),
+          },
         },
       ],
     }).compile();
@@ -45,17 +50,18 @@ describe('AccountService', () => {
 
   describe('create', () => {
     it('should create an account', async () => {
-      /*       const createDto: CreateAccountDto = {
-        name: 'Test Account',
-        balance: 1000,
-        type: 'current',
-      }; */
+      const mockSave = jest
+        .spyOn(repository, 'save')
+        .mockResolvedValue(createAccountMock as AccountEntity);
 
       const savedAccount = await service.create(createAccountMock);
+
       expect(savedAccount).toBeDefined();
       expect(savedAccount.name).toBe(createAccountMock.name);
       expect(savedAccount.balance).toBe(createAccountMock.balance);
       expect(savedAccount.type).toBe(createAccountMock.type);
+
+      expect(mockSave).toHaveBeenCalledWith(createAccountMock);
     });
 
     it('should throw UnauthorizedException for invalid account type', async () => {
@@ -110,10 +116,8 @@ describe('AccountService', () => {
 
   describe('update', () => {
     it('should update an account successfully', async () => {
-      // Mock findOne to return the existing account
       jest.spyOn(service, 'findOne').mockResolvedValue(AccountEntityMock);
 
-      // Mock save method of repository
       const saveSpy = jest.spyOn(repository, 'save').mockResolvedValue({
         ...AccountEntityMock,
         ...updateDto,
@@ -121,15 +125,12 @@ describe('AccountService', () => {
 
       const updatedAccount = await service.update(1, updateDto);
 
-      // Assertions
       expect(updatedAccount).toBeDefined();
       expect(updatedAccount.name).toBe(updateDto.name);
       expect(updatedAccount.type).toBe(updateDto.type);
 
-      // Ensure findOne was called with the correct ID
       expect(service.findOne).toHaveBeenCalledWith(1);
 
-      // Ensure save was called with the updated account
       expect(saveSpy).toHaveBeenCalledWith({
         ...AccountEntityMock,
         ...updateDto,
@@ -137,9 +138,9 @@ describe('AccountService', () => {
     });
 
     it('should throw NotFoundException when account is not found', async () => {
-      jest.spyOn(service, 'findOne').mockResolvedValue(undefined); // Simula que nenhum conta foi encontrada
+      jest.spyOn(service, 'findOne').mockResolvedValue(undefined);
 
-      const invalidId = 999; // ID inválido
+      const invalidId = 999;
       const updateDto: UpdateAccountDto = {
         name: 'Updated Name',
         type: 'current',

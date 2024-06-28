@@ -3,7 +3,7 @@ import { UpdateAccountDto } from '../dto/update-account.dto';
 export const createAccountMock = {
   name: 'Test Account',
   balance: 1000,
-  type: 'current',
+  type: 'checking',
 };
 
 export const updateDto: UpdateAccountDto = {

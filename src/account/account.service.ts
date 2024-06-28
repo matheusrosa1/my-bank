@@ -9,6 +9,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { AccountEntity } from './entities/account.entity';
 import { Repository } from 'typeorm';
 
+const validAccountTypes = ['checking', 'savings']; // checking = corrente, savings = poupança
 @Injectable()
 export class AccountService {
   constructor(
@@ -17,12 +18,7 @@ export class AccountService {
   ) {}
 
   async create(createAccountDto: CreateAccountDto) {
-    if (
-      createAccountDto.type !== 'checking' &&
-      createAccountDto.type !== 'savings' &&
-      createAccountDto.type !== 'poupança' &&
-      createAccountDto.type !== 'corrente'
-    ) {
+    if (!validAccountTypes.includes(createAccountDto.type)) {
       throw new UnauthorizedException('Invalid account type');
     }
 
@@ -64,6 +60,10 @@ export class AccountService {
 
     if (updateAccountDto.type !== undefined) {
       account.type = updateAccountDto.type;
+    }
+
+    if (!validAccountTypes.includes(updateAccountDto.type)) {
+      throw new UnauthorizedException('Invalid account type');
     }
 
     return this.accountRepository.save(account);

@@ -4,7 +4,7 @@ import {
   Post,
   Body,
   Param,
-  /*   UseGuards, */
+  UseGuards,
   Delete,
   Patch,
   UseInterceptors,
@@ -12,13 +12,12 @@ import {
 } from '@nestjs/common';
 import { PaymentService } from './payment.service';
 import { CreatePaymentDto } from './dto/create-payment.dto';
-
-/* import { AuthGuard } from '@nestjs/passport'; */
+import { AuthGuard } from '@nestjs/passport';
 import { UpdatePaymentDto } from './dto/update-payment.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import multerConfig from 'multer-config';
 
-/* @UseGuards(AuthGuard('jwt')) */
+@UseGuards(AuthGuard('jwt'))
 @Controller('payments')
 export class PaymentController {
   constructor(private readonly paymentService: PaymentService) {}

@@ -4,7 +4,7 @@ export const AccountEntityMock: AccountEntity = {
   id: 1,
   name: 'Test Account',
   balance: 1000,
-  type: 'current',
+  type: 'checking',
   payments: [],
   transactionReports: [],
 };
@@ -22,7 +22,7 @@ export const AccountsEntityMock: AccountEntity[] = [
     id: 2,
     name: 'Account 2',
     balance: 1000,
-    type: 'current',
+    type: 'checking',
     payments: [],
     transactionReports: [],
   },
