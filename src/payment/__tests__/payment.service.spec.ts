@@ -322,4 +322,102 @@ describe('PaymentService', () => {
       expect(paymentRepository.remove).toHaveBeenCalledWith(existingPayment);
     });
   });
+  describe('salvarUrlDaImagem', () => {
+    it('should save image URL in payment if found', async () => {
+      const paymentId = 1;
+      const imageUrl = 'https://example.com/image1.jpg';
+
+      const mockAccount: AccountEntity = {
+        id: 1,
+        name: 'Test Account',
+        type: 'current',
+        balance: 1000,
+        payments: [],
+        transactionReports: [],
+      };
+
+      const existingPayment: PaymentEntity = {
+        id: paymentId,
+        accountId: mockAccount.id,
+        amount: 100,
+        description: 'Payment 1',
+        date: new Date(),
+        imageUrl: 'https://example.com/image1.jpg',
+        account: mockAccount, // Adiciona a conta associada
+      };
+
+      jest
+        .spyOn(paymentRepository, 'findOne')
+        .mockResolvedValue(existingPayment);
+      jest.spyOn(paymentRepository, 'save').mockResolvedValue(existingPayment); // Simula save
+
+      const success = await service.salvarUrlDaImagem(imageUrl, paymentId);
+
+      expect(success).toBeTruthy();
+      expect(existingPayment.imageUrl).toBe(imageUrl);
+      expect(paymentRepository.findOne).toHaveBeenCalledWith({
+        where: { id: paymentId },
+      });
+      expect(paymentRepository.save).toHaveBeenCalledWith(existingPayment);
+    });
+
+    it('should return false if payment is not found', async () => {
+      const paymentId = 999;
+      const imageUrl = 'https://example.com/image1.jpg';
+
+      jest.spyOn(paymentRepository, 'findOne').mockResolvedValue(null);
+
+      const success = await service.salvarUrlDaImagem(imageUrl, paymentId);
+
+      expect(success).toBeFalsy();
+      expect(paymentRepository.findOne).toHaveBeenCalledWith({
+        where: { id: paymentId },
+      });
+    });
+  });
+
+  describe('uploadImagem', () => {
+    it('should return message when no file is uploaded', async () => {
+      const paymentId = 1;
+      const file: any = null; // Simula nenhum arquivo enviado
+
+      const result = await service.uploadImagem(file, paymentId);
+
+      expect(result.message).toBe('No files have been uploaded');
+    });
+
+    it('should upload image and return success message with URL', async () => {
+      const paymentId = 1;
+      const imageUrl = 'https://example.com/image1.jpg';
+      const file = { location: imageUrl }; // Simula um arquivo enviado com URL de localização
+
+      jest.spyOn(service, 'salvarUrlDaImagem').mockResolvedValue(true);
+
+      const result = await service.uploadImagem(file as any, paymentId);
+
+      expect(result.message).toBe('Successfully saved image URL');
+      expect(result.imageUrl).toBe(imageUrl);
+      expect(service.salvarUrlDaImagem).toHaveBeenCalledWith(
+        imageUrl,
+        paymentId,
+      );
+    });
+
+    it('should handle failure to upload image', async () => {
+      const paymentId = 1;
+      const imageUrl = 'https://example.com/image1.jpg';
+      const file = { location: imageUrl }; // Simula um arquivo enviado com URL de localização
+
+      jest.spyOn(service, 'salvarUrlDaImagem').mockResolvedValue(false);
+
+      const result = await service.uploadImagem(file as any, paymentId);
+
+      expect(result.message).toBe('Failed to save image URL');
+      expect(result.imageUrl).toBeUndefined();
+      expect(service.salvarUrlDaImagem).toHaveBeenCalledWith(
+        imageUrl,
+        paymentId,
+      );
+    });
+  });
 });

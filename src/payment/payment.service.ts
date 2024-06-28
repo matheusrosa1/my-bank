@@ -100,17 +100,14 @@ export class PaymentService {
         where: { id: paymentId },
       });
       if (!payment) {
-        throw new Error(`Pagamento com ID ${paymentId} não encontrado.`);
+        throw new Error(`Payment with ID ${paymentId} not found.`);
       }
 
-      payment.imageUrl = url; // Supondo que 'imageUrl' seja o nome do campo na entidade Payment para armazenar a URL da imagem
+      payment.imageUrl = url;
       await this.paymentRepository.save(payment);
       return true;
     } catch (error) {
-      console.error(
-        'Erro ao salvar URL da imagem no pagamento:',
-        error.message,
-      );
+      console.error('Error saving image URL in payment:', error.message);
       return false;
     }
   }
@@ -120,16 +117,16 @@ export class PaymentService {
     paymentId: number,
   ): Promise<{ message: string; imageUrl?: string }> {
     if (!file) {
-      return { message: 'Nenhum arquivo foi enviado' };
+      return { message: 'No files have been uploaded' };
     }
 
     const imageUrl = file.location;
     const success = await this.salvarUrlDaImagem(imageUrl, paymentId);
 
     if (success) {
-      return { message: 'URL da imagem salva com sucesso', imageUrl };
+      return { message: 'Successfully saved image URL', imageUrl };
     } else {
-      return { message: 'Falha ao salvar a URL da imagem' };
+      return { message: 'Failed to save image URL' };
     }
   }
 }

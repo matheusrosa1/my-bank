@@ -3,7 +3,7 @@ import { UpdatePaymentDto } from '../dto/update-payment.dto';
 import { PaymentEntity } from '../entities/payment.entity';
 const paymentId = 1;
 
-const payments = [
+export const payments = [
   {
     id: 1,
     accountId: 1,
