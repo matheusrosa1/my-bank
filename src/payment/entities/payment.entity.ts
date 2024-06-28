@@ -29,6 +29,9 @@ export class PaymentEntity {
   @Column({ name: 'date', type: 'date', default: () => 'CURRENT_DATE' })
   date: Date;
 
+  @Column({ name: 'image_url', nullable: true })
+  imageUrl: string;
+
   @ManyToOne(() => AccountEntity, (account) => account.payments)
   @JoinColumn({ name: 'account_id' })
   account: AccountEntity; // Cada pagamento pertence a uma conta

@@ -83,4 +83,43 @@ export class PaymentService {
   remove(id: number) {
     return `This action removes a #${id} payment`;
   }
+
+  async salvarUrlDaImagem(url: string, paymentId: number): Promise<boolean> {
+    try {
+      const payment = await this.paymentRepository.findOne({
+        where: { id: paymentId },
+      });
+      if (!payment) {
+        throw new Error(`Pagamento com ID ${paymentId} não encontrado.`);
+      }
+
+      payment.imageUrl = url; // Supondo que 'imageUrl' seja o nome do campo na entidade Payment para armazenar a URL da imagem
+      await this.paymentRepository.save(payment);
+      return true;
+    } catch (error) {
+      console.error(
+        'Erro ao salvar URL da imagem no pagamento:',
+        error.message,
+      );
+      return false;
+    }
+  }
+
+  async uploadImagem(
+    file: Express.MulterS3.File,
+    paymentId: number,
+  ): Promise<{ message: string; imageUrl?: string }> {
+    if (!file) {
+      return { message: 'Nenhum arquivo foi enviado' };
+    }
+
+    const imageUrl = file.location; // A URL pública da imagem após o upload para o S3
+    const success = await this.salvarUrlDaImagem(imageUrl, paymentId);
+
+    if (success) {
+      return { message: 'URL da imagem salva com sucesso', imageUrl };
+    } else {
+      return { message: 'Falha ao salvar a URL da imagem' };
+    }
+  }
 }
