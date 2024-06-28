@@ -120,4 +120,4 @@ $ npm run test
 
 ## License
 
-Este projeto está licenciado sob a [MIT licensed](LICENSE).
+Este projeto está licenciado sob a [MIT licensed]((https://github.com/matheusrosa1/my-bank?tab=MIT-1-ov-file)).
