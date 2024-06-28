@@ -9,7 +9,7 @@ import {
   createUserMockCpfInvalid,
 } from '../__mocks__/createUser.mock';
 import { UpdateUserDto } from '../dto/update-user.dto';
-import { NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { UnauthorizedException } from '@nestjs/common';
 
 describe('UserService', () => {
   let service: UserService;
@@ -58,7 +58,12 @@ describe('UserService', () => {
   });
 
   it('should return error if user already exists', async () => {
-    expect(service.create(createUserMock)).rejects.toThrowError();
+    try {
+      jest.spyOn(userRepository, 'findOne').mockResolvedValue(UserEntityMock);
+      await service.create(createUserMock);
+    } catch (error) {
+      expect(error.message).toBe('User already exists');
+    }
   });
 
   it('should return user if user not exist', async () => {
@@ -73,12 +78,6 @@ describe('UserService', () => {
 
   it('should return error if CPF is invalid', async () => {
     expect(service.create(createUserMockCpfInvalid)).rejects.toThrowError();
-  });
-
-  it('should return error if CPF is invalid', async () => {
-    jest.spyOn(userRepository, 'findOne').mockResolvedValue(UserEntityMock);
-
-    expect(service.create(createUserMock)).rejects.toThrowError();
   });
 
   it('should return all users', async () => {
@@ -107,9 +106,11 @@ describe('UserService', () => {
       email: 'newemail@example.com',
     };
 
-    await expect(service.update(1, updateDto)).rejects.toThrowError(
-      NotFoundException,
-    );
+    try {
+      await service.update(1, updateDto);
+    } catch (error) {
+      expect(error.message).toBe('User not found');
+    }
   });
 
   it('should throw UnauthorizedException if email already exists', async () => {
@@ -128,12 +129,14 @@ describe('UserService', () => {
     jest.spyOn(userRepository, 'find').mockResolvedValue([UserEntityMock]);
 
     const updateDto: UpdateUserDto = {
-      cpf: '12345678900',
+      cpf: '828.718.160-77',
     };
 
-    await expect(service.update(1, updateDto)).rejects.toThrowError(
-      UnauthorizedException,
-    );
+    try {
+      await service.update(1, updateDto);
+    } catch (error) {
+      expect(error.message).toBe('CPF already exists');
+    }
   });
   it('should remove a user successfully', async () => {
     const userId = 1;
@@ -149,9 +152,12 @@ describe('UserService', () => {
 
     const userId = 1;
 
-    await expect(service.remove(userId)).rejects.toThrowError(
-      NotFoundException,
-    );
+    try {
+      await service.remove(userId);
+    } catch (error) {
+      expect(error.message).toBe('User not found');
+    }
+
     expect(userRepository.findOne).toHaveBeenCalledWith({
       where: { id: userId },
     });

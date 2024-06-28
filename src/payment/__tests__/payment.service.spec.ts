@@ -44,7 +44,7 @@ describe('PaymentService', () => {
     it('should throw UnauthorizedException if amount is not provided', async () => {
       const createPaymentDto: CreatePaymentDto = {
         accountId: 1,
-        amount: null, // Amount is missing
+        amount: null,
         description: 'Test payment',
       };
 
@@ -55,7 +55,7 @@ describe('PaymentService', () => {
 
     it('should throw UnauthorizedException if accountId is not provided', async () => {
       const createPaymentDto: CreatePaymentDto = {
-        accountId: null, // Account ID is missing
+        accountId: null,
         amount: 100,
         description: 'Test payment',
       };
@@ -88,7 +88,7 @@ describe('PaymentService', () => {
 
       const account = new AccountEntity();
       account.id = 1;
-      account.balance = 50; // Insufficient funds
+      account.balance = 50;
 
       jest.spyOn(accountRepository, 'findOne').mockResolvedValueOnce(account);
 
@@ -106,8 +106,7 @@ describe('PaymentService', () => {
 
       const account = new AccountEntity();
       account.id = 1;
-      account.balance = 200; // Sufficient funds
-
+      account.balance = 200;
       jest.spyOn(accountRepository, 'findOne').mockResolvedValueOnce(account);
       jest.spyOn(accountRepository, 'save').mockResolvedValueOnce(account);
 
@@ -118,7 +117,7 @@ describe('PaymentService', () => {
       const result = await service.create(createPaymentDto);
 
       expect(result).toBe(payment);
-      expect(account.balance).toBe(100); // Balance should be updated
+      expect(account.balance).toBe(100);
       expect(accountRepository.save).toHaveBeenCalledWith(account);
       expect(paymentRepository.create).toHaveBeenCalledWith({
         accountId: createPaymentDto.accountId,
@@ -176,7 +175,7 @@ describe('PaymentService', () => {
         description: 'Payment 1',
         date: new Date(),
         imageUrl: 'https://example.com/image1.jpg',
-        account: new AccountEntity(), // Simula uma conta associada
+        account: new AccountEntity(),
       };
 
       jest.spyOn(paymentRepository, 'findOne').mockResolvedValue(mockPayment);
@@ -195,7 +194,6 @@ describe('PaymentService', () => {
         description: 'Updated description',
       };
 
-      // Simula uma conta associada ao pagamento
       const mockAccount: AccountEntity = {
         id: 1,
         name: 'Test Account',
@@ -212,7 +210,7 @@ describe('PaymentService', () => {
         description: 'Payment 1',
         date: new Date(),
         imageUrl: 'https://example.com/image1.jpg',
-        account: mockAccount, // Adiciona a conta associada
+        account: mockAccount,
       };
 
       jest
@@ -233,10 +231,8 @@ describe('PaymentService', () => {
     it('should throw UnauthorizedException if trying to update amount', async () => {
       const paymentId = 1;
       const updatePaymentDto: UpdatePaymentDto = {
-        amount: 200, // Tentativa de atualizar o valor
+        amount: 200,
       };
-
-      // Simula uma conta associada ao pagamento
       const mockAccount: AccountEntity = {
         id: 1,
         name: 'Test Account',
@@ -253,7 +249,7 @@ describe('PaymentService', () => {
         description: 'Payment 1',
         date: new Date(),
         imageUrl: 'https://example.com/image1.jpg',
-        account: mockAccount, // Adiciona a conta associada
+        account: mockAccount,
       };
 
       jest
@@ -269,7 +265,7 @@ describe('PaymentService', () => {
     });
 
     it('should throw NotFoundException if payment is not found', async () => {
-      const paymentId = 999; // Assume payment with ID 999 does not exist
+      const paymentId = 999;
       const updatePaymentDto: UpdatePaymentDto = {
         description: 'Updated description',
       };
@@ -304,7 +300,7 @@ describe('PaymentService', () => {
         description: 'Payment 1',
         date: new Date(),
         imageUrl: 'https://example.com/image1.jpg',
-        account: mockAccount, // Adiciona a conta associada
+        account: mockAccount,
       };
 
       jest
@@ -312,7 +308,7 @@ describe('PaymentService', () => {
         .mockResolvedValue(existingPayment);
       jest
         .spyOn(paymentRepository, 'remove')
-        .mockResolvedValue(existingPayment); // Simula remove
+        .mockResolvedValue(existingPayment);
 
       await service.remove(paymentId);
 
@@ -343,7 +339,7 @@ describe('PaymentService', () => {
         description: 'Payment 1',
         date: new Date(),
         imageUrl: 'https://example.com/image1.jpg',
-        account: mockAccount, // Adiciona a conta associada
+        account: mockAccount,
       };
 
       jest
@@ -379,7 +375,7 @@ describe('PaymentService', () => {
   describe('uploadImagem', () => {
     it('should return message when no file is uploaded', async () => {
       const paymentId = 1;
-      const file: any = null; // Simula nenhum arquivo enviado
+      const file: any = null;
 
       const result = await service.uploadImagem(file, paymentId);
 
@@ -389,8 +385,7 @@ describe('PaymentService', () => {
     it('should upload image and return success message with URL', async () => {
       const paymentId = 1;
       const imageUrl = 'https://example.com/image1.jpg';
-      const file = { location: imageUrl }; // Simula um arquivo enviado com URL de localização
-
+      const file = { location: imageUrl };
       jest.spyOn(service, 'salvarUrlDaImagem').mockResolvedValue(true);
 
       const result = await service.uploadImagem(file as any, paymentId);
@@ -406,7 +401,7 @@ describe('PaymentService', () => {
     it('should handle failure to upload image', async () => {
       const paymentId = 1;
       const imageUrl = 'https://example.com/image1.jpg';
-      const file = { location: imageUrl }; // Simula um arquivo enviado com URL de localização
+      const file = { location: imageUrl };
 
       jest.spyOn(service, 'salvarUrlDaImagem').mockResolvedValue(false);
 

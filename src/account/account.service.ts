@@ -9,7 +9,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { AccountEntity } from './entities/account.entity';
 import { Repository } from 'typeorm';
 
-const validAccountTypes = ['checking', 'savings']; // checking = corrente, savings = poupança
+const validAccountTypes = ['checking', 'savings']; // checking = conta corrente, savings = poupança
 @Injectable()
 export class AccountService {
   constructor(

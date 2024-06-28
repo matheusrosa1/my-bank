@@ -23,7 +23,7 @@ export const payments = [
 ] as PaymentEntity[];
 
 export const updatePaymentDto: UpdatePaymentDto = {
-  amount: 200, // Tentativa de atualizar o valor
+  amount: 200,
 };
 
 export const existingPayment: PaymentEntity = {
@@ -33,5 +33,5 @@ export const existingPayment: PaymentEntity = {
   description: 'Payment 1',
   date: new Date(),
   imageUrl: 'https://example.com/image1.jpg',
-  account: AccountEntityMock, // Adiciona a conta associada
+  account: AccountEntityMock,
 };
