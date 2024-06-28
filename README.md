@@ -28,6 +28,15 @@
 
 ## Installation
 
+docker run --name some-postgres -e POSTGRES_PASSWORD=mysecretpassword -p 5432:5432 -d postgres
+ 
+DB_HOST=localhost
+DB_USERNAME=postgres
+DB_PASSWORD=mysecretpassword
+DB_PORT=5432
+DB_DATABASE=postgres
+
+
 ```bash
 $ npm install
 ```
