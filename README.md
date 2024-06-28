@@ -122,3 +122,7 @@ $ npm run test
 ## Licença
 
 Este projeto está licenciado sob a [MIT licensed](https://github.com/matheusrosa1/my-bank?tab=MIT-1-ov-file).
+
+## Contato
+
+- [Linkedin](https://www.linkedin.com/in/matheus-rosa-dev/)
