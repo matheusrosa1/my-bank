@@ -72,16 +72,18 @@ Para subir um banco de dados PostgreSQL via Docker, execute o seguinte comando:
     docker run --name meu-postgres -e POSTGRES_PASSWORD=minhaSenha -p 5432:5432 -d postgres
 
 
-O arquivo .env deve denominar-se .env.development.local e sua configuração depende do comando utilizado acima, por exemplo, no caso utilizando o comando cima a configuração seria ficaria dessa forma:
+### Pontos importantes para funcionamento do projeto
+adicionar um arquivo .env.development.local com o seguinte corpo:
 
-DB_DATABASE=postgres
-DB_HOST=localhost
-DB_PORT=5432
-DB_USERNAME=meu-postgres
-DB_PASSWORD=postgres
+    DB_DATABASE=postgres
+    DB_HOST=localhost
+    DB_PORT=5432
+    DB_USERNAME=meu-postgres
+    DB_PASSWORD=postgres
 
+Para que o upload das imagens funcione é necessário incluir o arquivo .env.aws na raiz do projeto. Para ter acesso a esse recurso contate-me.
 
-##Running the app
+4. Rodando o servidor
 
 ```bash
 # Iniciar servidor
@@ -89,27 +91,33 @@ $ npm run start:dev
 
 ```
 
-## Test
+## Autenticação do Usuário
 
+Para autenticar um usuário, primeiro é necesśario cadastrar um user utilizando o endpoint POST `/users`. Com os seguintes campos:
 ```bash
-# unit tests
-$ npm run test
-
-
-# test coverage
-$ npm run test:cov
+{
+  "username": "john123",
+  "email": "john@example.com",
+  "password": "password123",
+  "cpf": "123.456.789-00"
+}
 ```
 
-## Support
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+E após o cadastro autenticar o usuário no endpoint POST `auth` (utilizando o `email` e o `password` cadastrado) e o mesmo irá retonar um token que deverá ser utilizado nas demais requisições, no seguinte formado:
 
-## Stay in touch
+Bearer `token`
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+## Testando a aplicação
+
+Para elaboração de testes do projeto foram realizados teste unitários utilizando o Jest.
+
+```bash
+# Rodando os testes
+$ npm run test
+```
+
 
 ## License
 
-Nest is [MIT licensed](LICENSE).
+Este projeto está licenciado sob a [MIT licensed](LICENSE).
