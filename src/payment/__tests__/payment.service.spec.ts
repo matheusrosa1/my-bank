@@ -127,4 +127,42 @@ describe('PaymentService', () => {
       expect(paymentRepository.save).toHaveBeenCalledWith(payment);
     });
   });
+  describe('findAll', () => {
+    it('should return all payments', async () => {
+      const payments = [
+        {
+          id: 1,
+          accountId: 1,
+          amount: 100,
+          description: 'Payment 1',
+          date: new Date(),
+          imageUrl: 'https://example.com/image1.jpg',
+        },
+        {
+          id: 2,
+          accountId: 2,
+          amount: 200,
+          description: 'Payment 2',
+          date: new Date(),
+          imageUrl: 'https://example.com/image2.jpg',
+        },
+      ] as PaymentEntity[];
+
+      jest.spyOn(paymentRepository, 'find').mockResolvedValueOnce(payments);
+
+      const result = await service.findAll();
+
+      expect(result).toBe(payments);
+      expect(paymentRepository.find).toHaveBeenCalled();
+    });
+
+    it('should return an empty array if no payments are found', async () => {
+      jest.spyOn(paymentRepository, 'find').mockResolvedValueOnce([]);
+
+      const result = await service.findAll();
+
+      expect(result).toEqual([]);
+      expect(paymentRepository.find).toHaveBeenCalled();
+    });
+  });
 });
