@@ -66,10 +66,9 @@ Para instalar e executar o projeto localmente, siga os passos abaixo:
 
 3. Instação da imagem Docker Postgres
 
-        docker run --name meu-postgres -e POSTGRES_PASSWORD=minhaSenha -p 5432:5432 -d postgres
+        docker run --name postgres -e POSTGRES_PASSWORD=postgres -p 5432:5432 -d postgres
 
-
-  4. Configuração do arquivo .env
+4. Configuração do arquivo .env
 
   O arquivo .env deverá estar na pasta raiz do projeto e com denominação de `.env.development.local`
  
@@ -78,10 +77,10 @@ Para instalar e executar o projeto localmente, siga os passos abaixo:
     DB_DATABASE=postgres
     DB_HOST=localhost
     DB_PORT=5432
-    DB_USERNAME=meu-postgres
+    DB_USERNAME=postgres
     DB_PASSWORD=postgres
 
-Para que o upload das imagens funcione é necessário incluir o arquivo `.env.aws` na raiz do projeto. Para ter acesso a esse recurso contate-me.
+  Para que o upload das imagens funcione é necessário incluir o arquivo `.env.aws` na raiz do projeto. Para ter acesso a esse recurso contate-me.
 
 4. Rodando o servidor
 
