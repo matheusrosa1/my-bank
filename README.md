@@ -72,7 +72,7 @@ Para instalar e executar o projeto localmente, siga os passos abaixo:
 
   O arquivo .env deverá estar na pasta raiz do projeto e com denominação de `.env.development.local`
  
-  A estrutura do arquivo .env depende dos comandos que voce utilizou para instalação da imagem Docker. Por exemplo, utilizando o comando disponibilizado acima, a configuração ficaria dessa forma:
+  A estrutura do arquivo .env depende dos comandos que voce utilizou para instalação da imagem Docker. Por exemplo, utilizando o comando disponibilizado acima, a configuração ficaria dessa forma (esta configuração está disponível no `.env.example`):
   
     DB_DATABASE=postgres
     DB_HOST=localhost
