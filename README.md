@@ -57,7 +57,7 @@ Para instalar e executar o projeto localmente, siga os passos abaixo:
 
 1. Clone o repositório:
    ```bash
-   git clone https://github.com/seu-usuario/my-bank.git
+   git clone git@github.com:matheusrosa1/my-bank.git
    cd my-bank
    
 2. Instale as dependências:
